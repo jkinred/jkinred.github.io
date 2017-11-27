@@ -4,7 +4,7 @@ DIR=$(dirname "$0")
 
 cd $DIR/..
 
-if [[ $(git status -s) ]]
+if [[ $(git status -s -uno) ]]
 then
     echo "The working directory is dirty. Please commit any pending changes."
     exit 1;
