@@ -8,6 +8,7 @@ In this post I describe an AWS provisioning system using Python boto to
 provision cloud resources for a company transitioning from a traditional ITIL
 model (with separate Engineering and Operations teams) to a more modern "DevOps"
 way of working.
+<!--more-->
 
 The Operations team is skilled at running servers in private datacentres and
 will now be responsible for a platform running on AWS.
