@@ -27,9 +27,9 @@ system was subsequently and successfully replaced by Terraform._
 # Just show me the code!
 
 Code for this article can be found in a private repository at
-[jkinred/midops-provisioning-scripts](https://bitbucket.org/jkinred/midops-provisioning-scripts).
-Access will be granted on request, please find my email address in the Contact
-section.
+[jkinred/midops-provisioning-scripts](https://github.com/jkinred/midops-provisioning-scripts).
+
+Access is granted on request, please contact me through GitHub.
 
 # Overview
 
