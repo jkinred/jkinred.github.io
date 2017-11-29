@@ -19,7 +19,7 @@ of Microservices_
 The solution utilised Fedora Workstation slimmed down with Kickstart, Packer to
 build the image, Masterless Puppet to configure the box and Vagrant to run it.
 
-Unfortunately, I can't publish this code.
+Unfortunately, I can't publish the code at this time.
 
 # Overview
 
