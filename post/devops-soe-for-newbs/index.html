@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>DevOps Vagrant Box</title>
+  <meta property="og:title" content="DevOps Vagrant Box" />
+  <meta name="twitter:title" content="DevOps Vagrant Box" />
+  <meta name="description" content="In this article I&rsquo;ll describe a successful solution to a lingering problem we
+faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
+tooling.
+
+">
+  <meta property="og:description" content="In this article I&rsquo;ll describe a successful solution to a lingering problem we
+faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
+tooling.
+
+">
+  <meta name="twitter:description" content="In this article I&rsquo;ll describe a successful solution to a lingering problem we
+faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
+tooling.
+
+">
+  <meta name="author" content=""/>
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://jkinred.github.io/blog/post/devops-soe-for-newbs/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jonathan&#39;s Work Examples" />
+
+  <meta name="generator" content="Hugo 0.31" />
+  <link rel="canonical" href="https://jkinred.github.io/blog/post/devops-soe-for-newbs/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/highlighting.css" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/highlight.min.css" />  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/custom.css" />
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://jkinred.github.io/blog/">Jonathan&#39;s Work Examples</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Contact" href="/blog/contact/">Contact</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>DevOps Vagrant Box</h1>
+                
+                
+                  <span class="post-meta">
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
+  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (748 mots)
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>In this article I&rsquo;ll describe a successful solution to a lingering problem we
+faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
+tooling.</p>
+
+<p></p>
+
+<p><em><strong>Note:</strong> This article was written retrospectively and we had started replacing
+this with a set of Docker containers which we called Microtools in the spirit
+of Microservices</em></p>
+
+<h1 id="just-show-me-the-code">Just show me the code!</h1>
+
+<p>The solution utilised Fedora Workstation slimmed down with Kickstart, Packer to
+build the image, Masterless Puppet to configure the box and Vagrant to run it.</p>
+
+<p>Unfortunately, I can&rsquo;t publish the code at this time.</p>
+
+<h1 id="overview">Overview</h1>
+
+<p>At the outset, I&rsquo;ll say that this is by no means a technical masterpiece.
+Rather, I write this article to highlight an ability to overcome barriers that
+can and do cripple a companies adoption of modern tooling.</p>
+
+<p>There&rsquo;s also a social aspect to this, as I was criticised (respectfully) by
+some peers for making it &ldquo;too easy&rdquo; for the receiving team to do DevOps. While
+I get the point, I don&rsquo;t stand for technical elitism and respectfully counter
+that things can never be easy enough!</p>
+
+<h1 id="the-problem">The problem</h1>
+
+<p>If you were doing infrastructure as code in a complex environment through the
+Ruby phase you&rsquo;ll know the pain that could be involved with getting a
+development environment right. In a large enterprise with many teams and
+products at different stages of their lifecycle that problem increases
+exponentially. Ruby versions, rbenv, gems, Puppet versions, corporate proxies
+and you haven&rsquo;t even started unit testing your manifests.</p>
+
+<p>The trivial need to have operators running a DevOps toolkit ran straight into
+the kind of ludicrous thing that can happen in enterprises.</p>
+
+<ul>
+<li>Business throws many millions at &ldquo;DevOps&rdquo;</li>
+<li>Business keeps development and operations separate</li>
+<li>Operations must run enterprise SOE or risk being dismissed (culture of fear)</li>
+<li>SOE is Windows 7 32-bit! In 2014! Not the primary choice of elite DevOps</li>
+</ul>
+
+<p>As our overall goal was to have our production infrastructure and deployments
+fully automated there were calls to short circuit training up the operations
+team and just throw the code over the fence to be run. Hmmm, sounds
+suspiciously like what we&rsquo;re trying to avoid!?</p>
+
+<p>I&rsquo;d spent a lot of time with our operations team and they were really nice
+people and competent system administrators. If we were going to do this right,
+they had to be along for the ride and be able to inject their own changes into
+the platform lifecycle.</p>
+
+<p>So while super cool people are out there talking at conferences about the next
+big thing, someone has to work out how to engineer around crazy problems like
+this so customers can actually receive the benefits of the last big thing.</p>
+
+<h1 id="some-solutions">Some solutions</h1>
+
+<ul>
+<li>Run a terminal server? Operators work remote after hours</li>
+<li>Run your own VM? Even though the laptops have 8GB or 16GB of RAM, the 32-bit SOE restricts them to 4GB memory!</li>
+<li>Buy them all MacBooks? Not yet</li>
+</ul>
+
+<h1 id="the-solution">The solution</h1>
+
+<p>So now, any self-respecting engineer has to smile and play the long game here.</p>
+
+<p>The solution consisted of the following technologies:</p>
+
+<ul>
+<li>Fedora Workstation (optimised for minimal size and memory use)</li>
+<li>Packer</li>
+<li>Puppet</li>
+<li>VirtualBox</li>
+<li>Vagrant</li>
+</ul>
+
+<p>There were some other boxes about but they weren&rsquo;t lightweight enough for the
+aforementioned problems and the OS was the easy part, getting the tooling
+configured was the hard part.</p>
+
+<h3 id="fedora-workstation">Fedora Workstation</h3>
+
+<p>I chose Fedora as it is the distribution I run on my own workstation. It was
+easy to slim down the installation through Kickstart and use a minimal GUI
+(XFCE).</p>
+
+<h3 id="packer">Packer</h3>
+
+<p>I absolutely love Packer and have used it for building development test images,
+production VMware templates and Amazon Machine Images. Will probably do another
+article on that.</p>
+
+<h3 id="puppet">Puppet</h3>
+
+<p>Packer passed control to Puppet which we ran locally against the manifests
+checked out from Git.</p>
+
+<p>The manifests configured things such as:</p>
+
+<ul>
+<li>Standard tools and environment</li>
+<li>Editor environment for code compliance checking</li>
+<li>Corporate proxies (worth mentioning as I&rsquo;ve seen so many competent tech people crushed by getting tooling to work behind these)</li>
+<li>Several Ruby versions with rbenv</li>
+<li>SSH authorized keys for elaborate jumping through platforms</li>
+<li>etc.</li>
+</ul>
+
+<p>Operators could also checkout the manifests from Git at any time and align
+their DevOps SOE.</p>
+
+<h3 id="virtualbox-and-vagrant">VirtualBox and Vagrant</h3>
+
+<p>All users had to do was install Vagrant and run:</p>
+
+<pre><code>vagrant box add &lt;url&gt;
+vagrant up
+</code></pre>
+
+<h1 id="profit">Profit!</h1>
+
+<p>The DevOps SOE was a success and used by many operators and subsequently
+adopted by other teams as they encountered the same issue and exhausted
+solutions.</p>
+
+<p>Later on, maybe 18 months later, MacBooks started appearing. It would have been
+a long wait :).</p>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+          <li class="previous">
+            <a href="https://jkinred.github.io/blog/post/aws-provisioning-with-python-boto/" data-toggle="tooltip" data-placement="top" title="AWS provisioning with Python boto">&larr; Previous Post</a>
+          </li>
+        
+        
+      </ul>
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://jkinred.github.io/blog/">Jonathan&#39;s Work Examples</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.31</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://jkinred.github.io/blog/js/main.js"></script>
+<script src="https://jkinred.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="https://jkinred.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+  </body>
+</html>
+

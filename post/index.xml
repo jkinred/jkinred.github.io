@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Jonathan&#39;s Work Examples</title>
+    <link>https://jkinred.github.io/blog/post/</link>
+    <description>Recent content in Posts on Jonathan&#39;s Work Examples</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 26 Nov 2017 15:55:05 +1100</lastBuildDate>
+    
+	<atom:link href="https://jkinred.github.io/blog/post/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>DevOps Vagrant Box</title>
+      <link>https://jkinred.github.io/blog/post/devops-soe-for-newbs/</link>
+      <pubDate>Sun, 26 Nov 2017 15:55:05 +1100</pubDate>
+      
+      <guid>https://jkinred.github.io/blog/post/devops-soe-for-newbs/</guid>
+      <description>&lt;p&gt;In this article I&amp;rsquo;ll describe a successful solution to a lingering problem we
+faced: Getting &amp;ldquo;traditional&amp;rdquo; Ops people working with modern infrastructure
+tooling.&lt;/p&gt;
+
+&lt;p&gt;&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>AWS provisioning with Python boto</title>
+      <link>https://jkinred.github.io/blog/post/aws-provisioning-with-python-boto/</link>
+      <pubDate>Sun, 26 Nov 2017 07:49:29 +1100</pubDate>
+      
+      <guid>https://jkinred.github.io/blog/post/aws-provisioning-with-python-boto/</guid>
+      <description>&lt;p&gt;In this post I describe an AWS provisioning system using Python boto to
+provision cloud resources for a company transitioning from a traditional ITIL
+model (with separate Engineering and Operations teams) to a more modern &amp;ldquo;DevOps&amp;rdquo;
+way of working.
+&lt;/p&gt;</description>
+    </item>
+    
+  </channel>
+</rss>

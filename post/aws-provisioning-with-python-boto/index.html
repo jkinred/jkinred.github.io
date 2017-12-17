@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>AWS provisioning with Python boto</title>
+  <meta property="og:title" content="AWS provisioning with Python boto" />
+  <meta name="twitter:title" content="AWS provisioning with Python boto" />
+  <meta name="description" content="In this post I describe an AWS provisioning system using Python boto to
+provision cloud resources for a company transitioning from a traditional ITIL
+model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
+way of working.
+">
+  <meta property="og:description" content="In this post I describe an AWS provisioning system using Python boto to
+provision cloud resources for a company transitioning from a traditional ITIL
+model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
+way of working.
+">
+  <meta name="twitter:description" content="In this post I describe an AWS provisioning system using Python boto to
+provision cloud resources for a company transitioning from a traditional ITIL
+model (with separate Engineering and Operations …">
+  <meta name="author" content=""/>
+  <meta name="twitter:card" content="summary" />
+  <meta property="og:url" content="https://jkinred.github.io/blog/post/aws-provisioning-with-python-boto/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Jonathan&#39;s Work Examples" />
+
+  <meta name="generator" content="Hugo 0.31" />
+  <link rel="canonical" href="https://jkinred.github.io/blog/post/aws-provisioning-with-python-boto/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/highlighting.css" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/pygment_highlights.css" />
+  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/highlight.min.css" />  <link rel="stylesheet" href="https://jkinred.github.io/blog/css/custom.css" />
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css" integrity="sha256-sCl5PUOGMLfFYctzDW3MtRib0ctyUvI9Qsmq2wXOeBY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css" integrity="sha256-BFeI1V+Vh1Rk37wswuOYn5lsTcaU96hGaI7OUVCLjPc=" crossorigin="anonymous" />
+
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+</head>
+
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="https://jkinred.github.io/blog/">Jonathan&#39;s Work Examples</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+          
+            <li>
+              <a title="Contact" href="/blog/contact/">Contact</a>
+            </li>
+          
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    <div class="avatar-container">
+      <div class="avatar-img-border">
+        
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+
+
+    
+  
+  
+  
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="post-heading">
+              <h1>AWS provisioning with Python boto</h1>
+                
+                
+                  <span class="post-meta">
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
+  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (809 mots)
+  
+</span>
+
+
+                
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>In this post I describe an AWS provisioning system using Python boto to
+provision cloud resources for a company transitioning from a traditional ITIL
+model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
+way of working.
+</p>
+
+<p>The Operations team is skilled at running servers in private datacentres and
+will now be responsible for a platform running on AWS.</p>
+
+<p>Primarily, the provisioning scripts were written as a middle ground between
+modern &ldquo;infrastructure as code&rdquo; and accommodating an operational team which is
+jumping through about 8 years of technical evolution in only a few months.</p>
+
+<p>In this particular organisation it is super important to take a patient and
+pragmatic approach. Focusing on people and striking the right balance with
+technology is the key to achieving results.</p>
+
+<p><em><strong>Note:</strong> This blog post was written retrospectively and this provisioning
+system was subsequently and successfully replaced by Terraform.</em></p>
+
+<h1 id="just-show-me-the-code">Just show me the code!</h1>
+
+<p>Code for this article can be found in a private repository at
+<a href="https://github.com/jkinred/midops-provisioning-scripts">jkinred/midops-provisioning-scripts</a>.</p>
+
+<p>Access is granted on request, please contact me through GitHub.</p>
+
+<h1 id="overview">Overview</h1>
+
+<p>The scripts provision the infrastructure for a hosted Content Management System
+(CMS) built around Adobe CQ.</p>
+
+<p>Three customers (grew to five) are signed up and complete customer separation must
+be ensured due to operational constraints as well as the future ability to
+&ldquo;hand off&rdquo; an individual customer CMS to a third party.</p>
+
+<p>Each customer has on average 60 EC2 instances across dev/test/prod.</p>
+
+<p>Apart from each customer CMS there is a shared services platform providing
+supporting infrastructure (e.g. centralised LDAP auth, metrics, ELK logging and
+more)</p>
+
+<h1 id="requirements">Requirements</h1>
+
+<ul>
+<li>A central definition describing a complete customer platform must exist</li>
+<li>Each customer definition must be kept separate from any other customer definition</li>
+<li>The starting point for the scripts is an empty AWS account containing a single &ldquo;bootstrap&rdquo; user</li>
+<li>The scripts must be able to operate idempotently or audit the running infrastructure against the central definition</li>
+<li>Instances must start and hand-off control to cloud-init and subsequently configuration management for final provisioning</li>
+<li>The scripts and definitions must be usable by operators with minimal skill in modern tooling and platforms</li>
+</ul>
+
+<p>Initially, the system must be able to manage the following AWS resources:</p>
+
+<ul>
+<li>IAM users, groups and policies</li>
+<li>VPC</li>
+<li>Subnets</li>
+<li>Security groups</li>
+<li>EBS storage volumes</li>
+<li>EC2 compute</li>
+<li>Elastic IPs</li>
+<li>Route53 records</li>
+</ul>
+
+<h1 id="existing-software">Existing software</h1>
+
+<p>Terraform was evaluated and we determined that it didn&rsquo;t match the unique
+business constraints and was also considered to be too immature, we lovingly
+nicknamed it <em>Terrorform</em>.</p>
+
+<p>I submitted these pull requests to fix an issue I experienced during evaluation:</p>
+
+<ul>
+<li><a href="https://github.com/mitchellh/goamz/pull/94">Allow setting of the EbsOptimized flag when provisioning instances</a></li>
+<li><a href="https://github.com/hashicorp/terraform/pull/260">Allow building of EC2 instances with ebs_optimized flag</a></li>
+</ul>
+
+<p>CloudFormation was also evaluated. The JSON made my eyes bleed and it was even
+scarier to run than Terraform.</p>
+
+<h1 id="design">Design</h1>
+
+<p>The provisioning system will be based on a collection of definitions which
+describe each AWS resource. Taken as a whole, the definitions will describe the
+entire platform.</p>
+
+<p>Definitions will be written in YAML for usability and data portability should
+another tool become available.</p>
+
+<p>The YAML definitions will be read by scripts written in Python using the boto
+AWS library.</p>
+
+<p>The YAML definitions will be stored in a Git repository allowing for backup,
+version control and auditing.</p>
+
+<h3 id="uniquely-identifying-each-resource">Uniquely identifying each resource</h3>
+
+<p>Each resource will be assigned a generated UUID which will be applied to the
+AWS resource using tags. This will allow the scripts to locate a resource
+accurately when performing updates or auditing.</p>
+
+<p>In addition, a unique identifier allows for an entire platform to be defined
+and self-referenced before any resources exist.</p>
+
+<h3 id="sample-instance-definition">Sample instance definition</h3>
+
+<p>This example shows the full definition of an <em>instance</em> resource. See the
+<code>examples/</code> directory for definitions of other resource types.</p>
+
+<pre><code>domain: p.core.companyname.com
+instance_type: t2.small
+ami: ami-00000000
+keypair: midops-bootstrap-key
+az: ap-southeast-2b
+monitoring: true
+ebs_optimized: false
+elastic_ip: 8.8.8.8
+source_dest_check: true
+instance_profile_name: ec2_role
+tags:
+    UUID: F646A7C7-3CA8-4FDB-AF45-70D75F3B4520
+    node_environment: prod
+    node_platform: core
+    puppet_environment: prod_coreaws
+    node_stream: prod
+    classes: role::bastionhost
+</code></pre>
+
+<h1 id="usage">Usage</h1>
+
+<p>This section only serves as a guide, please refer and contribute to the
+platform documentation and <code>--help</code> for full details.</p>
+
+<p>It is a pre-requisite that appropriate developer tooling is configured. Those
+starting out can use the DevOps SOE Vagrant box which comes preconfigured with
+all the right tools.</p>
+
+<h4 id="setup-the-provisioning-scripts">Setup the provisioning scripts</h4>
+
+<pre><code>mkvirtualenv midops-provisioning-scripts
+git checkout https://git.companyname.com/git/midops-provisioning-scripts
+cd midops-provisioning-scripts
+pip install -r requirements.txt
+</code></pre>
+
+<h4 id="checkout-the-definitions-for-a-customer">Checkout the definitions for a customer</h4>
+
+<pre><code>git checkout https://git.company.com/git/customer-platform-definitions
+</code></pre>
+
+<h4 id="provision-a-single-resource">Provision a single resource</h4>
+
+<pre><code>cd customer-platform-definitions
+midops-provisioning provision volumes/snowflake01-data.yaml
+midops-provisioning provision instances/snowflake01.yaml
+</code></pre>
+
+<h4 id="provision-all-the-resources">Provision all the resources</h4>
+
+<p>Just use shell-fu to provision the resources you need.</p>
+
+<p>Example:</p>
+
+<pre><code>for volume in volumes/web*; do midops-provisioning provision $volume; done
+for instance in instances/web*; do midops-provisioning provision $instance; done
+</code></pre>
+
+<h1 id="contributing">Contributing</h1>
+
+<p>To contribute to the provisioning tools, please create a feature branch and
+submit a pull request as per the standard process. The CI job can be found in
+Bamboo <a href="https://ci.companyname.com/BUILD-ID">here</a>. New builds are created for
+branches automatically, please make sure the tests pass before submitting a PR.</p>
+      </article>
+
+      <ul class="pager blog-pager">
+        
+        
+          <li class="next">
+            <a href="https://jkinred.github.io/blog/post/devops-soe-for-newbs/" data-toggle="tooltip" data-placement="top" title="DevOps Vagrant Box">Next Post &rarr;</a>
+          </li>
+        
+      </ul>
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+    <footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;
+          2017
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="https://jkinred.github.io/blog/">Jonathan&#39;s Work Examples</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="http://gohugo.io">Hugo v0.31</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js" integrity="sha384-/y1Nn9+QQAipbNQWU65krzJralCnuOasHncUFXGkdwntGeSvQicrYkiUBwsgUqc1" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/contrib/auto-render.min.js" integrity="sha384-dq1/gEHSxPZQ7DdrM82ID4YVol9BYyU7GbWlIwnwyPzotpoc57wDw/guX8EaYGPx" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="https://jkinred.github.io/blog/js/main.js"></script>
+<script src="https://jkinred.github.io/blog/js/highlight.min.js"></script>
+<script> hljs.initHighlightingOnLoad(); </script><script> renderMathInElement(document.body); </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js" integrity="sha256-UplRCs9v4KXVJvVY+p+RSo5Q4ilAUXh7kpjyIP5odyc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js" integrity="sha256-PWHOlUzc96pMc8ThwRIXPn8yH4NOLu42RQ0b9SpnpFk=" crossorigin="anonymous"></script>
+<script src="https://jkinred.github.io/blog/js/load-photoswipe.js"></script>
+
+
+
+
+  </body>
+</html>
+
