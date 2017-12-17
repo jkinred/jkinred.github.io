@@ -1,0 +1,10 @@
+baseURL = "https://jkinred.github.io/blog/"
+languageCode = "en-us"
+title = "Jonathan's Work Examples"
+theme = "beautifulhugo"
+[[menu.main]]
+    name = "Contact"
+    pre = "<i class='fa fa-heart'></i>"
+    weight = -110
+    identifier = "contact"
+    url = "contact/"
