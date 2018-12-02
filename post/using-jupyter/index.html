@@ -5,18 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Jonathan&#39;s Work Examples</title>
-  <meta property="og:title" content="Jonathan&#39;s Work Examples" />
-  <meta name="twitter:title" content="Jonathan&#39;s Work Examples" />
+  <title>Using Jupyter with custom environments</title>
+  <meta property="og:title" content="Using Jupyter with custom environments" />
+  <meta name="twitter:title" content="Using Jupyter with custom environments" />
+  <meta name="description" content="This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
+Using Jupyter in this way builds on top of a common workflow using IPython for interactive development, which has been a common process for me during development.
+An example of when this is especially useful, would be when applying logic to a data construct which I am not familiar with by allowing interactive exploration of the data and then rolling up the code from that exercise into the actual code.">
+  <meta property="og:description" content="This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
+Using Jupyter in this way builds on top of a common workflow using IPython for interactive development, which has been a common process for me during development.
+An example of when this is especially useful, would be when applying logic to a data construct which I am not familiar with by allowing interactive exploration of the data and then rolling up the code from that exercise into the actual code.">
+  <meta name="twitter:description" content="This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
+Using Jupyter in this way builds on top of …">
   <meta name="author" content=""/>
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://jkinred.github.io/" />
+  <meta property="og:url" content="https://jkinred.github.io/post/using-jupyter/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Jonathan&#39;s Work Examples" />
 
   <meta name="generator" content="Hugo 0.51" />
-  <link rel="canonical" href="https://jkinred.github.io/" />
-  <link rel="alternate" href="https://jkinred.github.io/index.xml" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
+  <link rel="canonical" href="https://jkinred.github.io/post/using-jupyter/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -137,9 +145,17 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>Jonathan&#39;s Work Examples</h1>
+            <div class="post-heading">
+              <h1>Using Jupyter with custom environments</h1>
                 
+                
+                  <span class="post-meta">
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on December 2, 2018
+  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (330 mots)
+  
+</span>
+
+
                 
             </div>
           </div>
@@ -150,125 +166,87 @@
 
 
     
-  <div role="main" class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can
+be used to manage a collection of notebooks across many projects.</p>
+
+<p>Using Jupyter in this way builds on top of a common workflow using IPython for
+interactive development, which has been a common process for me during
+development.</p>
+
+<p>An example of when this is especially useful, would be when applying logic to a
+data construct which I am not familiar with by allowing interactive exploration
+of the data and then rolling up the code from that exercise into the actual
+code.</p>
+
+<p>IPython is great, though I often find myself wanting to refer back to code I
+have previously written or to share that code with someone else.</p>
+
+<p>Enter <a href="https://jupyter.org/">Jupyter</a>.</p>
+
+<p>In this context, Jupyter is basically a web-based IPython which provides an
+intuitive way to manage code snippets and experiments.</p>
+
+<p>My plan is to use Jupyter as a central source of reference code. To be useful
+for that it has to be aware of the development projects I am working on which
+we&rsquo;ll achieve by registering our development environments with a global Jupyter
+instance. Primarily I am using <code>pipenv</code> which this example demonstrates.</p>
+
+<p>Firstly, install jupyter, I use <a href="https://github.com/cs01/pipx">pipx</a>:</p>
+
+<pre><code>$ pipx install jupyter-core
+$ pipx install notebook
+</code></pre>
+
+<p>Now go to your project and add <code>ipykernel</code> to the dev dependencies of the
+project you want to use in Jupyter:</p>
+
+<pre><code>$ cd workspace/project1
+$ pipenv install --dev ipykernel
+</code></pre>
+
+<p>Next, add the project as an environment:</p>
+
+<pre><code>$ pipenv run python -m ipykernel install --user --name project1 --display-name &quot;Project 1&quot;
+Installed kernelspec project1 in /home/jonathan/.local/share/jupyter/kernels/project1
+
+$ grep project1 /home/jonathan/.local/share/jupyter/kernels/project1/kernel.json
+&quot;/home/jonathan/.local/share/virtualenvs/project1-vqFkHOwT/bin/python&quot;,
+</code></pre>
+
+<p>Notice in the output, that the kernel has been installed into the user
+configuration pointing at the <code>pipenv</code> managed virtual environment. This will
+allow you to select and experiment in your project with all dependencies
+available. Exactly what we wanted!</p>
+
+<p>Finally, you can start your global Jupyter notebook or refresh a running
+notebook and see that the new kernel is available:</p>
+
+<pre><code>$ jupyter notebook
+</code></pre>
+
+<p><img src="/img/using-jupyter/kernels.png" alt="Kernels" /></p>
+
+      </article>
+
+      <ul class="pager blog-pager">
         
-
-        <div class="posts-list">
-          
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/using-jupyter/">
-                <h2 class="post-title">Using Jupyter with custom environments</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on December 2, 2018
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (330 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
-Using Jupyter in this way builds on top of a common workflow using IPython for interactive development, which has been a common process for me during development.
-An example of when this is especially useful, would be when applying logic to a data construct which I am not familiar with by allowing interactive exploration of the data and then rolling up the code from that exercise into the actual code.
-                  <a href="https://jkinred.github.io/post/using-jupyter/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/">
-                <h2 class="post-title">X1 Carbon Gen 6 Sleep on Fedora</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 6, 2018
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (227 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
-Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.
-$ dmesg | grep -i acpi | grep 'ACPI: (supports' [ 0.216048] ACPI: (supports S0 S4 S5) cat /sys/power/mem_sleep [s2idle] cat /sys/power/state $ sudo dnf install iasl cpio $ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.
-                  <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/devops-soe-for-newbs/">
-                <h2 class="post-title">DevOps Vagrant Box</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (748 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <p>In this article I&rsquo;ll describe a successful solution to a lingering problem we
-faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
-tooling.</p>
-                  <a href="https://jkinred.github.io/post/devops-soe-for-newbs/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/aws-provisioning-with-python-boto/">
-                <h2 class="post-title">AWS provisioning with Python boto</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (809 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <p>In this post I describe an AWS provisioning system using Python boto to
-provision cloud resources for a company transitioning from a traditional ITIL
-model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
-way of working.</p>
-                  <a href="https://jkinred.github.io/post/aws-provisioning-with-python-boto/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-        </div>
-
+          <li class="previous">
+            <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" data-toggle="tooltip" data-placement="top" title="X1 Carbon Gen 6 Sleep on Fedora">&larr; Previous Post</a>
+          </li>
         
-      </div>
+        
+      </ul>
+
+
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">

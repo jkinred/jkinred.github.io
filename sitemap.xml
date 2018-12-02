@@ -3,6 +3,16 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://jkinred.github.io/post/using-jupyter/</loc>
+    <lastmod>2018-12-02T12:10:01+11:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/</loc>
+    <lastmod>2018-03-06T08:04:40+11:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://jkinred.github.io/contact/</loc>
     <lastmod>2017-11-26T18:08:31+11:00</lastmod>
   </url>
@@ -24,13 +34,13 @@
   
   <url>
     <loc>https://jkinred.github.io/</loc>
-    <lastmod>2017-11-26T18:08:31+11:00</lastmod>
+    <lastmod>2018-12-02T12:10:01+11:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://jkinred.github.io/post/</loc>
-    <lastmod>2017-11-26T15:55:05+11:00</lastmod>
+    <lastmod>2018-12-02T12:10:01+11:00</lastmod>
     <priority>0</priority>
   </url>
   

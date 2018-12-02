@@ -14,7 +14,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Jonathan&#39;s Work Examples" />
 
-  <meta name="generator" content="Hugo 0.31" />
+  <meta name="generator" content="Hugo 0.51" />
   <link rel="canonical" href="https://jkinred.github.io/post/" />
   <link rel="alternate" href="https://jkinred.github.io/post/index.xml" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
@@ -144,6 +144,52 @@
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://jkinred.github.io/post/using-jupyter/">
+                <h2 class="post-title">Using Jupyter with custom environments</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                Posted on December 2, 2018
+              </p>
+              <div class="post-entry">
+                
+                  This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
+Using Jupyter in this way builds on top of a common workflow using IPython for interactive development, which has been a common process for me during development.
+An example of when this is especially useful, would be when applying logic to a data construct which I am not familiar with by allowing interactive exploration of the data and then rolling up the code from that exercise into the actual code.
+                  <a href="https://jkinred.github.io/post/using-jupyter/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/">
+                <h2 class="post-title">X1 Carbon Gen 6 Sleep on Fedora</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                Posted on March 6, 2018
+              </p>
+              <div class="post-entry">
+                
+                  Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
+Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.
+$ dmesg | grep -i acpi | grep 'ACPI: (supports' [ 0.216048] ACPI: (supports S0 S4 S5) cat /sys/power/mem_sleep [s2idle] cat /sys/power/state $ sudo dnf install iasl cpio $ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.
+                  <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" class="post-read-more">[Read More]</a>
+                
+              </div>
+
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://jkinred.github.io/post/devops-soe-for-newbs/">
                 <h2 class="post-title">DevOps Vagrant Box</h2>
 
@@ -158,8 +204,6 @@
                   <p>In this article I&rsquo;ll describe a successful solution to a lingering problem we
 faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
 tooling.</p>
-
-<p></p>
                   <a href="https://jkinred.github.io/post/devops-soe-for-newbs/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -183,8 +227,7 @@ tooling.</p>
                   <p>In this post I describe an AWS provisioning system using Python boto to
 provision cloud resources for a company transitioning from a traditional ITIL
 model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
-way of working.
-</p>
+way of working.</p>
                   <a href="https://jkinred.github.io/post/aws-provisioning-with-python-boto/" class="post-read-more">[Read More]</a>
                 
               </div>
@@ -211,7 +254,7 @@ way of working.
           
 
           &nbsp;&bull;&nbsp;
-          2017
+          2018
 
           
             &nbsp;&bull;&nbsp;
@@ -220,7 +263,7 @@ way of working.
         </p>
         
         <p class="credits theme-by text-muted">
-          <a href="http://gohugo.io">Hugo v0.31</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
+          <a href="http://gohugo.io">Hugo v0.51</a> powered &nbsp;&bull;&nbsp; Theme by <a href="http://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a> adapted to <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a>
           
         </p>
       </div>

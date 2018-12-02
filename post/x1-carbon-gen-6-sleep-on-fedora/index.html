@@ -5,18 +5,26 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
-  <title>Jonathan&#39;s Work Examples</title>
-  <meta property="og:title" content="Jonathan&#39;s Work Examples" />
-  <meta name="twitter:title" content="Jonathan&#39;s Work Examples" />
+  <title>X1 Carbon Gen 6 Sleep on Fedora</title>
+  <meta property="og:title" content="X1 Carbon Gen 6 Sleep on Fedora" />
+  <meta name="twitter:title" content="X1 Carbon Gen 6 Sleep on Fedora" />
+  <meta name="description" content="Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
+Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.
+$ dmesg | grep -i acpi | grep &#39;ACPI: (supports&#39; [ 0.216048] ACPI: (supports S0 S4 S5) cat /sys/power/mem_sleep [s2idle] cat /sys/power/state $ sudo dnf install iasl cpio $ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.">
+  <meta property="og:description" content="Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
+Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.
+$ dmesg | grep -i acpi | grep &#39;ACPI: (supports&#39; [ 0.216048] ACPI: (supports S0 S4 S5) cat /sys/power/mem_sleep [s2idle] cat /sys/power/state $ sudo dnf install iasl cpio $ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.">
+  <meta name="twitter:description" content="Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
+Some one-liners, …">
   <meta name="author" content=""/>
   <meta name="twitter:card" content="summary" />
-  <meta property="og:url" content="https://jkinred.github.io/" />
+  <meta property="og:url" content="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Jonathan&#39;s Work Examples" />
 
   <meta name="generator" content="Hugo 0.51" />
-  <link rel="canonical" href="https://jkinred.github.io/" />
-  <link rel="alternate" href="https://jkinred.github.io/index.xml" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
+  <link rel="canonical" href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" />
+  <link rel="alternate" href="" type="application/rss+xml" title="Jonathan&#39;s Work Examples">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css" integrity="sha384-wITovz90syo1dJWVh32uuETPVEtGigN07tkttEqPv+uR2SE/mbQcG7ATL28aI9H0" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -137,9 +145,17 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="page-heading">
-              <h1>Jonathan&#39;s Work Examples</h1>
+            <div class="post-heading">
+              <h1>X1 Carbon Gen 6 Sleep on Fedora</h1>
                 
+                
+                  <span class="post-meta">
+  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 6, 2018
+  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (227 mots)
+  
+</span>
+
+
                 
             </div>
           </div>
@@ -150,125 +166,74 @@
 
 
     
-  <div role="main" class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p><em>Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).</em></p>
+
+<p>Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.</p>
+
+<pre><code>$ dmesg | grep -i acpi | grep 'ACPI: (supports'
+[    0.216048] ACPI: (supports S0 S4 S5)
+cat /sys/power/mem_sleep
+[s2idle]
+cat /sys/power/state
+
+$ sudo dnf install iasl cpio
+$ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.aml
+$ iasl -d dsdt.aml
+$ patch --verbose &lt; Downloads/X1C6_S3_DSDT.patch
+$ iasl -ve -tc dsdt.dsl
+$ mkdir -p kernel/firmware/acpi
+$ cp dsdt.aml kernel/firmware/acpi
+$ find kernel | cpio -H newc --create &gt; acpi_override
+$ cp acpi_override /boot
+$ sudo grubby --args=&quot;mem_sleep_default=deep&quot; --update-kernel /boot/vmlinuz-4.15.6-300.fc27.x86_64
+$ sudo grubby --initrd=&quot;/acpi_override /initramfs-4.15.6-300.fc27.x86_64.img&quot; --update-kernel /boot/vmlinuz-4.15.6-300.fc27.x86_64
+</code></pre>
+
+<p>Update BIOS settings (TB3 and Secure Boot)</p>
+
+<pre><code>Mar 05 22:27:18 nomad kernel: ACPI: DSDT ACPI table found in initrd [kernel/firmware/acpi/dsdt.aml][0x23300]
+Mar 05 22:27:18 nomad kernel: Lockdown: ACPI table override is restricted; see man kernel_lockdown.7
+Mar 05 22:27:18 nomad kernel: ACPI: kernel is locked down, ignoring table override
+Mar 05 22:27:18 nomad kernel: ACPI: Early table checksum verification disabled
+</code></pre>
+
+<p>Successful:</p>
+
+<pre><code>$ dmesg | grep DSDT
+Mar 05 23:00:11 nomad kernel: ACPI: DSDT ACPI table found in initrd [kernel/firmware/acpi/dsdt.aml][0x23300]
+
+$ dmesg | grep -i acpi | grep 'ACPI: (supports'
+[    0.131256] ACPI: (supports S0 S3 S4 S5)
+
+$ cat /sys/power/mem_sleep
+s2idle [deep]
+</code></pre>
+
+      </article>
+
+      <ul class="pager blog-pager">
         
-
-        <div class="posts-list">
-          
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/using-jupyter/">
-                <h2 class="post-title">Using Jupyter with custom environments</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on December 2, 2018
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (330 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  This post demonstrates running a &ldquo;global&rdquo; user-scoped Jupyter notebook that can be used to manage a collection of notebooks across many projects.
-Using Jupyter in this way builds on top of a common workflow using IPython for interactive development, which has been a common process for me during development.
-An example of when this is especially useful, would be when applying logic to a data construct which I am not familiar with by allowing interactive exploration of the data and then rolling up the code from that exercise into the actual code.
-                  <a href="https://jkinred.github.io/post/using-jupyter/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/">
-                <h2 class="post-title">X1 Carbon Gen 6 Sleep on Fedora</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on March 6, 2018
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 2 min (227 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  Update: Since BIOS version 1.30, the X1 Carbon supports S3 mode when enabled in the BIOS menu (choose &ldquo;Linux&rdquo; sleep mode instead of the default &ldquo;Windows 10&rdquo;).
-Some one-liners, for dealing with the lack of regular sleep states on the X1 Carbon Generation 6.
-$ dmesg | grep -i acpi | grep 'ACPI: (supports' [ 0.216048] ACPI: (supports S0 S4 S5) cat /sys/power/mem_sleep [s2idle] cat /sys/power/state $ sudo dnf install iasl cpio $ sudo cat /sys/firmware/acpi/tables/DSDT &gt; dsdt.
-                  <a href="https://jkinred.github.io/post/x1-carbon-gen-6-sleep-on-fedora/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/devops-soe-for-newbs/">
-                <h2 class="post-title">DevOps Vagrant Box</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (748 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <p>In this article I&rsquo;ll describe a successful solution to a lingering problem we
-faced: Getting &ldquo;traditional&rdquo; Ops people working with modern infrastructure
-tooling.</p>
-                  <a href="https://jkinred.github.io/post/devops-soe-for-newbs/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://jkinred.github.io/post/aws-provisioning-with-python-boto/">
-                <h2 class="post-title">AWS provisioning with Python boto</h2>
-                
-                
-              </a>
-
-              <span class="post-meta">
-  <i class="fa fa-calendar-o"></i>&nbsp;Posted on November 26, 2017
-  &nbsp;|&nbsp; <i class="fa fa-clock-o"></i> 4 min (809 mots)
-  
-</span>
-
-
-              <div class="post-entry">
-                
-                  <p>In this post I describe an AWS provisioning system using Python boto to
-provision cloud resources for a company transitioning from a traditional ITIL
-model (with separate Engineering and Operations teams) to a more modern &ldquo;DevOps&rdquo;
-way of working.</p>
-                  <a href="https://jkinred.github.io/post/aws-provisioning-with-python-boto/" class="post-read-more">[Read More]</a>
-                
-              </div>
-
-              
-            </article>
-          
-        </div>
-
+          <li class="previous">
+            <a href="https://jkinred.github.io/post/devops-soe-for-newbs/" data-toggle="tooltip" data-placement="top" title="DevOps Vagrant Box">&larr; Previous Post</a>
+          </li>
         
-      </div>
+        
+          <li class="next">
+            <a href="https://jkinred.github.io/post/using-jupyter/" data-toggle="tooltip" data-placement="top" title="Using Jupyter with custom environments">Next Post &rarr;</a>
+          </li>
+        
+      </ul>
+
+
+      
+
     </div>
   </div>
+</div>
 
     <footer>
   <div class="container">
